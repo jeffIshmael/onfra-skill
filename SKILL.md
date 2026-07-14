@@ -90,6 +90,21 @@ curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/
   -d '{"walletAddress":"0x..."}'
 ```
 
+## Generate verified statement (paid / free)
+
+Free for own wallet; **0.01 USDT** for external wallets. Pins statement to IPFS.
+
+```bash
+curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/statement" \
+  -H "Content-Type: application/json" \
+  -d '{"walletAddress":"0x...", "period":"6M"}'
+```
+
+Or generate and redirect directly to IPFS gateway URL (free for browser/chat links):
+```bash
+curl -sS "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/statement/generate?walletAddress=0x...&period=6M"
+```
+
 ## Natural-language query
 
 ```bash
@@ -106,17 +121,20 @@ Discover tools from `{API_URL}/.well-known/mcp.json`:
 |------|---------|
 | `analyze_wallet` | Full reputation analysis |
 | `chat_query` | Natural-language wallet Q&A |
+| `generate_statement` | Generate verified statement (3M, 6M, 12M history) and upload to IPFS |
 | `generate_report` | Verified REP passport |
 | `verify_report` | Verify REP-{id} onchain |
 | `screen_wallet` | Lender underwriting screen (requires `callerAddress` + x402) |
 
-## x402 payment
+## x402 payment & Attribution
 
-Paid calls need `X-PAYMENT` (aliases: `PAYMENT-SIGNATURE`, `x-payment`). Settlement: **USDT on Celo mainnet** (`0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e`).
+Integrating agents and backends must define an `AGENT_PRIVATE_KEY` for a funded Celo wallet to pay for x402 queries.
+
+Paid calls need `X-PAYMENT` (aliases: `PAYMENT-SIGNATURE`, `x-payment`). Settlement: **USDT on Celo mainnet** (`0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e`). Get this address from `GET /api/health/integrations`.
 
 Pricing:
-- Own wallet analyze/chat: **free**
-- External wallet analyze/chat: **0.01 USDT**
+- Own wallet analyze/chat/statement: **free**
+- External wallet analyze/chat/statement: **0.01 USDT**
 - Verified report: **0.10 USDT**
 
 ## Agent behavior
@@ -126,6 +144,7 @@ Pricing:
 - If `status` is `processing`, poll cached lookup or ask user to retry
 - Do not share private keys or ask users to sign unrelated transactions
 - For lender-specific approve/decline flows, use `screen_wallet` — see `reference.md`
+- Always append the transaction attribution tag to onchain transactions using `@celo/attribution-tags` (e.g. `toDataSuffix("onfra")`).
 
 ## Install this skill
 
