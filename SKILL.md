@@ -1,5 +1,5 @@
 ---
-name: onfra-check-wallet
+name: onfra-skill
 description: >-
   Check Celo wallet financial reputation via OnFRA — income, health score,
   reputation score, loan capacity, statements, and REP passports. Use when the
@@ -41,7 +41,7 @@ Override `API_URL` with `ONFRA_API_URL` when testing locally.
 
 ## Primary endpoint: analyze wallet
 
-Free when querying the caller's own wallet; external queries cost **0.01 USDT** via x402 (`X-PAYMENT` header).
+All queries cost **0.01 USDT** via x402 (`X-PAYMENT` header).
 
 ```bash
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/analyze" \
@@ -92,7 +92,7 @@ curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/
 
 ## Generate verified statement (paid / free)
 
-Free for own wallet; **0.01 USDT** for external wallets. Pins statement to IPFS.
+**0.01 USDT** for all wallets. Pins statement to IPFS.
 
 ```bash
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/statement" \
@@ -133,8 +133,7 @@ Integrating agents and backends must define an `AGENT_PRIVATE_KEY` for a funded 
 Paid calls need `X-PAYMENT` (aliases: `PAYMENT-SIGNATURE`, `x-payment`). Settlement: **USDT on Celo mainnet** (`0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e`). Get this address from `GET /api/health/integrations`.
 
 Pricing:
-- Own wallet analyze/chat/statement: **free**
-- External wallet analyze/chat/statement: **0.01 USDT**
+- Analyze/chat/statement: **0.01 USDT**
 - Verified report: **0.10 USDT**
 
 ## Agent behavior
@@ -155,7 +154,7 @@ npx skills add github:jeffIshmael/onfra-skill
 Or clone into your agent skills directory:
 
 ```bash
-git clone https://github.com/jeffIshmael/onfra-skill.git .agents/skills/onfra-check-wallet
+git clone https://github.com/jeffIshmael/onfra-skill.git .agents/skills/onfra-skill
 ```
 
 See [reference.md](reference.md) for lender screen endpoint and JSON schemas.
