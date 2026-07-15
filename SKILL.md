@@ -46,6 +46,7 @@ All queries cost **0.01 USDT** via x402 (`X-PAYMENT` header).
 ```bash
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/analyze" \
   -H "Content-Type: application/json" \
+  -H "X-PAYMENT: <x402-signature>" \
   -d '{"walletAddress":"0x..."}'
 ```
 
@@ -90,19 +91,15 @@ curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/
   -d '{"walletAddress":"0x..."}'
 ```
 
-## Generate verified statement (paid / free)
+## Generate verified statement (paid)
 
-**0.01 USDT** for all wallets. Pins statement to IPFS.
+**0.01 USDT** via x402. Pins statement to IPFS.
 
 ```bash
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/statement" \
   -H "Content-Type: application/json" \
+  -H "X-PAYMENT: <x402-signature>" \
   -d '{"walletAddress":"0x...", "period":"6M"}'
-```
-
-Or generate and redirect directly to IPFS gateway URL (free for browser/chat links):
-```bash
-curl -sS "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/statement/generate?walletAddress=0x...&period=6M"
 ```
 
 ## Natural-language query
@@ -110,6 +107,7 @@ curl -sS "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/st
 ```bash
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/chat" \
   -H "Content-Type: application/json" \
+  -H "X-PAYMENT: <x402-signature>" \
   -d '{"walletAddress":"0x...","message":"What is this wallet'\''s reputation?"}'
 ```
 
