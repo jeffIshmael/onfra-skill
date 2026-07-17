@@ -47,7 +47,7 @@ All queries cost **0.01 USDT** via x402 (`X-PAYMENT` header).
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/analyze" \
   -H "Content-Type: application/json" \
   -H "X-PAYMENT: <x402-signature>" \
-  -d '{"walletAddress":"0x..."}'
+  -d '{"walletAddress":"0x...","callerAddress":"<agent-wallet-address>"}'
 ```
 
 ### Key response fields
@@ -88,7 +88,7 @@ Returns wallet, scores, report hash, IPFS CID, and onchain attestation status.
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/report" \
   -H "Content-Type: application/json" \
   -H "X-PAYMENT: <x402-signature>" \
-  -d '{"walletAddress":"0x..."}'
+  -d '{"walletAddress":"0x...","callerAddress":"<agent-wallet-address>"}'
 ```
 
 ## Generate verified statement (paid)
@@ -99,7 +99,7 @@ curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/statement" \
   -H "Content-Type: application/json" \
   -H "X-PAYMENT: <x402-signature>" \
-  -d '{"walletAddress":"0x...", "period":"6M"}'
+  -d '{"walletAddress":"0x...", "callerAddress":"<agent-wallet-address>", "period":"6M"}'
 ```
 
 ## Natural-language query
@@ -108,7 +108,7 @@ curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/chat" \
   -H "Content-Type: application/json" \
   -H "X-PAYMENT: <x402-signature>" \
-  -d '{"walletAddress":"0x...","message":"What is this wallet'\''s reputation?"}'
+  -d '{"walletAddress":"0x...","callerAddress":"<agent-wallet-address>","message":"What is this wallet'\''s reputation?"}'
 ```
 
 ## MCP tools (agent-native)
