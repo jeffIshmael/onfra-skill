@@ -40,8 +40,7 @@ curl -sS -X POST "${ONFRA_API_URL}/api/lender/screen" \
   -H "Content-Type: application/json" \
   -H "X-PAYMENT: <x402-signature>" \
   -d '{
-    "walletAddress": "0xBorrower...",
-    "callerAddress": "0xLender..."
+    "walletAddress": "0xBorrower..."
   }'
 ```
 

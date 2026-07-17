@@ -23,8 +23,8 @@ OnFRA (Onchain Financial Reputation Agent) turns public Celo wallet activity int
 | Surface | URL |
 |---------|-----|
 | API (production) | `https://wallet-profile-orpin.vercel.app` |
-| Marketing / docs | `https://onfra.xyz` (or local `http://localhost:3001`) |
-| App | `https://app.onfra.xyz` (or local `http://localhost:3000`) |
+| Marketing / docs | `https://onfra-umber.vercel.app` (or local `http://localhost:3001`) |
+| App | `https://onfra-umber.vercel.app` (or local `http://localhost:3000`) |
 | MCP manifest | `{API_URL}/.well-known/mcp.json` |
 | Agent card (A2A) | `{API_URL}/.well-known/agent-card.json` |
 | ERC-8004 registry | `https://8004scan.io/agents/celo/9219` |
@@ -41,13 +41,18 @@ Override `API_URL` with `ONFRA_API_URL` when testing locally.
 
 ## Primary endpoint: analyze wallet
 
-All queries cost **0.01 USDT** via x402 (`X-PAYMENT` header).
+### The Open-Close Payment Lifecycle (x402)
+
+To interact with paid endpoints, follow this 3-step lifecycle:
+1. **Quote** → Call the endpoint without payment to receive a `402 Payment Required` response containing the `price` and destination address.
+2. **Pay** → Use your `AGENT_PRIVATE_KEY` to sign a payment transaction (via the x402 protocol) for the requested amount.
+3. **Submit** → Resubmit the exact same request, but include the signature in the `X-PAYMENT` header.
 
 ```bash
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/analyze" \
   -H "Content-Type: application/json" \
   -H "X-PAYMENT: <x402-signature>" \
-  -d '{"walletAddress":"0x...","callerAddress":"<agent-wallet-address>"}'
+  -d '{"walletAddress":"0x..."}'
 ```
 
 ### Key response fields
@@ -88,7 +93,7 @@ Returns wallet, scores, report hash, IPFS CID, and onchain attestation status.
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/report" \
   -H "Content-Type: application/json" \
   -H "X-PAYMENT: <x402-signature>" \
-  -d '{"walletAddress":"0x...","callerAddress":"<agent-wallet-address>"}'
+  -d '{"walletAddress":"0x..."}'
 ```
 
 ## Generate verified statement (paid)
@@ -99,7 +104,7 @@ curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/statement" \
   -H "Content-Type: application/json" \
   -H "X-PAYMENT: <x402-signature>" \
-  -d '{"walletAddress":"0x...", "callerAddress":"<agent-wallet-address>", "period":"6M"}'
+  -d '{"walletAddress":"0x...", "period":"6M"}'
 ```
 
 ## Natural-language query
@@ -108,7 +113,7 @@ curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/chat" \
   -H "Content-Type: application/json" \
   -H "X-PAYMENT: <x402-signature>" \
-  -d '{"walletAddress":"0x...","callerAddress":"<agent-wallet-address>","message":"What is this wallet'\''s reputation?"}'
+  -d '{"walletAddress":"0x...", "message":"What is this wallet'\''s reputation?"}'
 ```
 
 ## MCP tools (agent-native)
@@ -122,7 +127,7 @@ Discover tools from `{API_URL}/.well-known/mcp.json`:
 | `generate_statement` | Generate verified statement (3M, 6M, 12M history) and upload to IPFS |
 | `generate_report` | Verified REP passport |
 | `verify_report` | Verify REP-{id} onchain |
-| `screen_wallet` | Lender underwriting screen (requires `callerAddress` + x402) |
+| `screen_wallet` | Lender underwriting screen (requires x402) |
 
 ## x402 payment & Attribution
 
@@ -146,7 +151,7 @@ Pricing:
 ## Install this skill
 
 ```bash
-npx skills add github:jeffIshmael/onfra-skill
+npx skills add jeffIshmael/onfra-skill
 ```
 
 Or clone into your agent skills directory:
