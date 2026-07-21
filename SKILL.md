@@ -45,8 +45,8 @@ Override `API_URL` with `ONFRA_API_URL` when testing locally.
 
 To interact with paid endpoints, follow this 3-step lifecycle:
 1. **Quote** → Call the endpoint without payment to receive a `402 Payment Required` response containing the `price` and destination address.
-2. **Pay** → Use your `AGENT_PRIVATE_KEY` to sign a payment transaction (via the x402 protocol) for the requested amount.
-3. **Submit** → Resubmit the exact same request, but include the signature in the `X-PAYMENT` header.
+2. **Pay** → Using the `AGENT_PRIVATE_KEY` injected into your environment variables by your backend/host, sign an ERC-20 transfer (USDT) on the Celo network for the requested amount to the destination address. Wait for the transaction to confirm.
+3. **Submit** → Resubmit the exact same request, but include the transaction hash signature in the `X-PAYMENT` header.
 
 ```bash
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/analyze" \
@@ -66,12 +66,15 @@ curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/
 | `incomeLabel` | Income stability classification |
 | `loanRange` | Suggested loan capacity range (USD) |
 | `loanConfidence` | Confidence in loan estimate |
-| `threeMonthStatement` | Inflow/outflow/net USD, tx count |
+| `createdAt` | ISO timestamp of when the analysis was generated |
 | `aiDashboardSummary` | Natural-language summary |
 
 Schema: `{API_URL}/schemas/walletAnalysisResult.schema.json`
 
 ## Cached lookup (free)
+
+This endpoint is completely free and returns the last cached analysis (the "four values" listed above), as well as the `createdAt` timestamp indicating when the data was last fetched.
+**NOTE**: It does *not* return raw transaction statements.
 
 ```bash
 curl -sS "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/wallet/0x.../analysis"
@@ -98,7 +101,8 @@ curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/
 
 ## Generate verified statement (paid)
 
-**0.01 USDT** via x402. Pins statement to IPFS.
+**0.01 USDT** via x402. Pins statement PDF to IPFS (viewable via `https://red-above-locust-968.mypinata.cloud/ipfs/<cid>`).
+**NOTE**: If you need transaction statements or cash flows, you MUST use this endpoint. The `analyze` endpoints will never return raw transaction statements.
 
 ```bash
 curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/statement" \
