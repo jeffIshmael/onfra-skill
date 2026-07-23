@@ -1,6 +1,6 @@
 # OnFRA API reference (skill supplement)
 
-Base URL: `https://wallet-profile-orpin.vercel.app`
+Base URL: `https://app.onfra.xyz`
 
 ## JSON schemas
 
@@ -76,7 +76,7 @@ const account = privateKeyToAccount(process.env.AGENT_PRIVATE_KEY as Hex);
 const client = createWalletClient({ account, chain: celo, transport: http() });
 
 // 2. Fetch the required payTo treasury address
-const { x402Status } = await fetch("https://wallet-profile-orpin.vercel.app/api/health/integrations").then(r => r.json());
+const { x402Status } = await fetch("https://app.onfra.xyz/api/health/integrations").then(r => r.json());
 const payTo = x402Status.payTo;
 
 // 3. Generate X-PAYMENT header (using viem signTypedData for EIP-3009)

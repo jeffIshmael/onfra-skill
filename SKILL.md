@@ -22,9 +22,9 @@ OnFRA (Onchain Financial Reputation Agent) turns public Celo wallet activity int
 
 | Surface | URL |
 |---------|-----|
-| API (production) | `https://wallet-profile-orpin.vercel.app` |
-| Marketing / docs | `https://onfra-umber.vercel.app` (or local `http://localhost:3001`) |
-| App | `https://onfra-umber.vercel.app` (or local `http://localhost:3000`) |
+| API (production) | `https://app.onfra.xyz` |
+| Marketing / docs | `https://onfra.xyz` (or local `http://localhost:3001`) |
+| App | `https://onfra.xyz` (or local `http://localhost:3000`) |
 | MCP manifest | `{API_URL}/.well-known/mcp.json` |
 | Agent card (A2A) | `{API_URL}/.well-known/agent-card.json` |
 | ERC-8004 registry | `https://8004scan.io/agents/celo/9219` |
@@ -49,7 +49,7 @@ To interact with paid endpoints, follow this 3-step lifecycle:
 3. **Submit** → Resubmit the exact same request, but include the transaction hash signature in the `X-PAYMENT` header.
 
 ```bash
-curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/analyze" \
+curl -sS -X POST "${ONFRA_API_URL:-https://app.onfra.xyz}/api/agent/analyze" \
   -H "Content-Type: application/json" \
   -H "X-PAYMENT: <x402-signature>" \
   -d '{"walletAddress":"0x..."}'
@@ -77,13 +77,13 @@ This endpoint is completely free and returns the last cached analysis (the "four
 **NOTE**: It does *not* return raw transaction statements.
 
 ```bash
-curl -sS "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/wallet/0x.../analysis"
+curl -sS "${ONFRA_API_URL:-https://app.onfra.xyz}/api/wallet/0x.../analysis"
 ```
 
 ## Verify REP passport (free)
 
 ```bash
-curl -sS "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/verify/REP-X141GYYEUM"
+curl -sS "${ONFRA_API_URL:-https://app.onfra.xyz}/api/agent/verify/REP-X141GYYEUM"
 ```
 
 Returns wallet, scores, report hash, IPFS CID, and onchain attestation status.
@@ -93,7 +93,7 @@ Returns wallet, scores, report hash, IPFS CID, and onchain attestation status.
 **0.10 USDT** via x402.
 
 ```bash
-curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/report" \
+curl -sS -X POST "${ONFRA_API_URL:-https://app.onfra.xyz}/api/agent/report" \
   -H "Content-Type: application/json" \
   -H "X-PAYMENT: <x402-signature>" \
   -d '{"walletAddress":"0x..."}'
@@ -105,7 +105,7 @@ curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/
 **NOTE**: If you need transaction statements or cash flows, you MUST use this endpoint. The `analyze` endpoints will never return raw transaction statements.
 
 ```bash
-curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/statement" \
+curl -sS -X POST "${ONFRA_API_URL:-https://app.onfra.xyz}/api/agent/statement" \
   -H "Content-Type: application/json" \
   -H "X-PAYMENT: <x402-signature>" \
   -d '{"walletAddress":"0x...", "period":"6M"}'
@@ -114,7 +114,7 @@ curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/
 ## Natural-language query
 
 ```bash
-curl -sS -X POST "${ONFRA_API_URL:-https://wallet-profile-orpin.vercel.app}/api/agent/chat" \
+curl -sS -X POST "${ONFRA_API_URL:-https://app.onfra.xyz}/api/agent/chat" \
   -H "Content-Type: application/json" \
   -H "X-PAYMENT: <x402-signature>" \
   -d '{"walletAddress":"0x...", "message":"What is this wallet'\''s reputation?"}'

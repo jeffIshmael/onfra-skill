@@ -52,8 +52,8 @@ Then update the install command with your GitHub username.
 
 ## Links
 
-- API: https://wallet-profile-orpin.vercel.app
-- MCP: https://wallet-profile-orpin.vercel.app/.well-known/mcp.json
+- API: https://app.onfra.xyz
+- MCP: https://app.onfra.xyz/.well-known/mcp.json
 - ERC-8004: https://8004scan.io/agents/celo/9219
 - Docs: https://onfra.xyz/api
 
